@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 readonly DIRECTORY=/etc
 readonly EXCLUDES='^(?:~\$.*|.*\.(?:tmp|temp|bak)$|.*~$)'
 readonly BASELINE=/tmp/8003_asn6/etc_hashes.txt
@@ -68,7 +68,7 @@ function compare_files () {
 
     timestamp=$(date '+%s')
     log_entry="$(date '+%s')\tMODIFIED:$(IFS=", "; echo "${modified[*]}")\tADDED:$(IFS=", "; echo "${added[*]}")\tREMOVED:$(IFS=", "; echo "${removed[*]}")"
-    echo $log_entry >> $LOG_FILE
+    echo -e $log_entry >> $LOG_FILE
 
     if [[ ! -z $modified || ! -z $added || ! -z $removed ]]; then
         email_body="Timestamp: $timestamp\n"
@@ -84,7 +84,7 @@ function compare_files () {
             fi
         done
 
-        echo "$email_body" | mail -s "Integrity check failed" $(whoami)
+        echo -e "$email_body" | mail -s "Integrity check failed" $(whoami)
 
         if [[ $run_report == false ]]; then
             echo "Some files were added/removed/modified since last baseline was created. Use --report to see more details."
