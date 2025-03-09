@@ -1,0 +1,2 @@
+PATH=/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/sbin
+* * * * * /Users/reotamai/Code/8003/SHA256-file-integrity-checker/integrity-checker.sh --check > /dev/null 2>&1
