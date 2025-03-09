@@ -1,8 +1,8 @@
 #!/bin/sh
 readonly DIRECTORY=/etc
-readonly EXCLUDES='(\.tmp|~)$'
-readonly BASELINE=~/Code/8003/assignment6/source/etc_hashes.txt
-readonly LOG_FILE=~/Code/8003/assignment6/source/integrity_report.log
+readonly EXCLUDES='^(?:~\$.*|.*\.(?:tmp|temp|bak)$|.*~$)'
+readonly BASELINE=/tmp/8003_asn6/etc_hashes.txt
+readonly LOG_FILE=/tmp/8003_asn6/integrity_report.log
 
 function clear_baseline () {
     local baseline=$1
@@ -36,9 +36,9 @@ function compare_files () {
     local file1=$1
     local file2=$2
 
-    if [[ ! -w $LOG_FILE ]]; then
-        echo "Cannot write to $LOG_FILE: Permission denined"
-        exit 1
+    if [[ ! -f $LOG_FILE ]]; then
+        mkdir -p $(dirname $LOG_FILE)
+        touch $LOG_FILE
     fi
 
     local modified=()
@@ -131,6 +131,11 @@ function generate_baseline () {
         echo "$DIRECTORY is not a valid directory"
         exit 1
     fi
+    if [[ ! -f $BASELINE ]]; then
+        mkdir -p $(dirname $BASELINE)
+        touch $BASELINE
+    fi
+
     clear_baseline $BASELINE
     compute_hashes $DIRECTORY $BASELINE
 }
