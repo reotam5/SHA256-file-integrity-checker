@@ -1,6 +1,6 @@
 #!/bin/bash
 readonly DIRECTORY=/etc
-readonly EXCLUDES='^(?:~\$.*|.*\.(?:tmp|temp|bak)$|.*~$)'
+readonly EXCLUDES='^(~\$.*|.*\.(tmp|temp|bak)$|.*~$)'
 readonly BASELINE=/tmp/8003_asn6/etc_hashes.txt
 readonly LOG_FILE=/tmp/8003_asn6/integrity_report.log
 
