@@ -41,6 +41,11 @@ function compare_files () {
         touch $LOG_FILE
     fi
 
+    if [[ ! -w $LOG_FILE ]]; then
+        echo "Cannot write to $LOG_FILE: Permission denied"
+        exit 1
+    fi
+
     local modified=()
     local added=()
     local removed=()
@@ -105,6 +110,10 @@ function display_report () {
         echo "No report found."
         exit 1
     else
+        if [[ ! -r $LOG_FILE ]]; then
+            echo "Cannot read $LOG_FILE: Permission denied"
+            exit 1
+        fi
         line=$(tail -n 1 $LOG_FILE)
 
         # Extract the timestamp, modified, added, and removed files. Remove trailing spaces
@@ -135,6 +144,10 @@ function generate_baseline () {
         mkdir -p $(dirname $BASELINE)
         touch $BASELINE
     fi
+    if [[ ! -w $BASELINE ]]; then
+        echo "Cannot write to $BASELINE: Permission denied"
+        exit 1
+    fi
 
     clear_baseline $BASELINE
     compute_hashes $DIRECTORY $BASELINE
@@ -143,6 +156,10 @@ function generate_baseline () {
 function check_integrity () {
     if [[ ! -f $BASELINE ]]; then
         echo "Baseline not found. Please generate a baseline first using --baseline option"
+        exit 1
+    fi
+    if [[ ! -r $BASELINE ]]; then
+        echo "Cannot read $BASELINE: Permission denied"
         exit 1
     fi
     temp_file=$(mktemp)
